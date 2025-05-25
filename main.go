@@ -7,12 +7,13 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/mikesmitty/edkey"
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/term"
 )
 
 const (
-	privateKeyHeader = "PRIVATE KEY"
+	privateKeyHeader = "OPENSSH PRIVATE KEY"
 	outputFile       = "restored_key"
 )
 
@@ -188,7 +189,7 @@ func restoreKey(mnemonic string) ([]byte, []byte, error) {
 
 	privateKeyBytes := pem.EncodeToMemory(&pem.Block{
 		Type:  privateKeyHeader,
-		Bytes: privateKey,
+		Bytes: edkey.MarshalED25519PrivateKey(privateKey),
 	})
 
 	authorizedKeyBytes := ssh.MarshalAuthorizedKey(publicKey)
